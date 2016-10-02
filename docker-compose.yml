@@ -1,11 +1,13 @@
 apache:
-  image: iitg/magento:1.9.2.4
+  image: iitgdocker/magento:1.9.2.4
   ports:
-    - "8080:80"
+    - "80:80"
+    - "443:443"
   links:
     - percona-server
     - redis
   volumes:
+    - /data/magento/etc:/var/www/html/app/etc
     - /data/magento/ssl:/etc/httpd/ssl
 redis:
   image: redis:3.2.4
@@ -17,5 +19,8 @@ percona-server:
     - "3306:3306"
   environment:
     - MYSQL_ROOT_PASSWORD=password
+    - MYSQL_DATABASE=magento
+    - MYSQL_USER=magento
+    - MYSQL_PASSWORD=password
   volumes:
     - /data/percona/mysql:/var/lib/mysql
