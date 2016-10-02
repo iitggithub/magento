@@ -94,6 +94,7 @@ Other than the standard mysql container environment variables which can be bette
 Variable              | Default Value (docker-compose) | Description
 --------------------- | ------------------------------ |------------
 MYSQL_ROOT_PASSWORD   | password                       | MySQL root password (required)
+MYSQL_HOST            | percona-server                 | The host serving the MySQL database
 MYSQL_DATABASE        | magento                        | The name of a MySQL database to create on startup
 MYSQL_USER            | magento                        | The mysql user to create on startup
 MYSQL_PASSWORD        | password                       | The password for the mysql user above
