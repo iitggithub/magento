@@ -1,5 +1,5 @@
 apache:
-  image: iitg/magento:1.9.2.4
+  image: iitgdocker/magento:1.9.2.4
   ports:
     - "8080:80"
   links:
