@@ -20,6 +20,13 @@ if [ -n "${MAGENTO_LOCALE}" ] && [ -n "${MAGENTO_LOCALE}" ] && [ -n "${MAGENTO_D
   php -f /var/www/html/install.php -- --license_agreement_accepted "yes" --locale $MAGENTO_LOCALE --timezone $MAGENTO_TIMEZONE --default_currency $MAGENTO_DEFAULT_CURRENCY --db_host $MYSQL_HOST --db_name $MYSQL_DATABASE --db_user $MYSQL_USER --db_pass $MYSQL_PASSWORD --url $MAGENTO_URL --skip_url_validation "yes" --use_rewrites "no" --use_secure "no" --secure_base_url "" --use_secure_admin "no" --admin_firstname $MAGENTO_ADMIN_FIRSTNAME --admin_lastname $MAGENTO_ADMIN_LASTNAME --admin_email $MAGENTO_ADMIN_EMAIL --admin_username $MAGENTO_ADMIN_USERNAME --admin_password $MAGENTO_ADMIN_PASSWORD
 fi
 
+# Makes changes to the container if we're just testing
+if [ ${MAGENTO_TESTING} -eq 1 ]
+  then
+  # Disables cookie stuff
+  patch -p0 /var/www/html/app/code/core/Mage/Core/Model/Session/Abstract/Varien.php /tmp/Varien.php.patch
+fi
+
 # Apache gets grumpy about PID files pre-existing
 rm -f /var/run/httpd/httpd.pid
 
