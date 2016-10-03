@@ -38,7 +38,9 @@ RUN sed -i -e 's/Listen 443 https/Listen 443 https\nSSLCompression off\nSSLUseSt
 # Disable unused modules
 RUN sed -i 's/LoadModule info_module/#LoadModule info_module/g' /etc/httpd/conf.modules.d/00-base.conf
 
-# Increase
+# Allow overrides. Surely, there's gotta be a better way to do this...
+RUN awk '/    AllowOverride None/{count++;if(count==2){sub("    AllowOverride None","    AllowOverride All")}}1' /etc/httpd/conf/httpd.conf >/etc/httpd/conf/httpd.conf.new
+RUN mv /etc/httpd/conf/httpd.conf.new /etc/httpd/conf/httpd.conf
 
 RUN cd /tmp && curl -s \
                     --insecure \

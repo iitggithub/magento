@@ -99,6 +99,7 @@ MYSQL_DATABASE           | magento                        | The name of a MySQL 
 MYSQL_USER               | magento                        | The mysql user to create on database container startup
 MYSQL_PASSWORD           | password                       | The password for the mysql user above
 MAGENTO_TESTING          | 0                              | Disables checks to make it easier to run in a test environment. 0 = production, 1 = testing.
+MAGENTO_SERVERNAME       | unset                          | Sets a global ServerName in Apache configuration.
 
 The run.sh script requires all of these variables to be set before it will run the install.php script. If you don't have these set, you'll be forced to use the web installation wizard on first run.
 

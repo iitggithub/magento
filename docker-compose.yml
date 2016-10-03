@@ -7,7 +7,7 @@ apache:
     - percona-server
     - redis
   volumes:
-    - /data/magento/etc:/var/www/html/app/etc
+#    - /data/magento/etc:/var/www/html/app/etc
     - /data/magento/ssl:/etc/httpd/ssl
   environment:
 #    - MAGENTO_LOCALE=en_AU
