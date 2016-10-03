@@ -9,6 +9,17 @@ apache:
   volumes:
     - /data/magento/etc:/var/www/html/app/etc
     - /data/magento/ssl:/etc/httpd/ssl
+  environment:
+#    - MAGENTO_LOCALE=en_AU
+#    - MAGENTO_TIMEZONE=Australia/Sydney
+#    - MAGENTO_DEFAULT_CURRENCY=AUD
+#    - MAGENTO_URL=http://www.mystore.com
+#    - MAGENTO_ADMIN_FIRSTNAME=MyStore
+#    - MAGENTO_ADMIN_LASTNAME=Admin
+#    - MAGENTO_ADMIN_EMAIL=mystoreadmin@mystore.com
+#    - MAGENTO_ADMIN_USERNAME=mystoreadmin
+#    - MAGENTO_ADMIN_PASSWORD=>q34gw7wKU>CPp6.
+    - MAGENTO_TESTING=1
 redis:
   image: redis:3.2.4
   ports:

@@ -91,10 +91,26 @@ I've been tossing up whether to use environment variables a la Alex Cheng albeit
 
 Other than the standard mysql container environment variables which can be better explained on their respective docker pages, there aren't any to note (yet).
 
-Variable              | Default Value (docker-compose) | Description
---------------------- | ------------------------------ |------------
-MYSQL_ROOT_PASSWORD   | password                       | MySQL root password (required)
-MYSQL_HOST            | percona-server                 | The host serving the MySQL database
-MYSQL_DATABASE        | magento                        | The name of a MySQL database to create on startup
-MYSQL_USER            | magento                        | The mysql user to create on startup
-MYSQL_PASSWORD        | password                       | The password for the mysql user above
+Variable                 | Default Value (docker-compose) | Description
+------------------------ | ------------------------------ |------------
+MYSQL_ROOT_PASSWORD      | password                       | Sets the MySQL root password
+MYSQL_HOST               | percona-server                 | The host serving the MySQL database
+MYSQL_DATABASE           | magento                        | The name of a MySQL database to create on database container startup
+MYSQL_USER               | magento                        | The mysql user to create on database container startup
+MYSQL_PASSWORD           | password                       | The password for the mysql user above
+MAGENTO_TESTING          | 0                              | Disables checks to make it easier to run in a test environment. 0 = production, 1 = testing.
+
+The run.sh script requires all of these variables to be set before it will run the install.php script. If you don't have these set, you'll be forced to use the web installation wizard on first run.
+
+Variable                 | Default Value (docker-compose) | Description
+------------------------ | ------------------------------ |------------
+MAGENTO_LOCALE           | unset                          | Magento locale ie (en_AU)
+MAGENTO_TIMEZONE         | unset                          | Magento timezone ie (Australia/Sydney
+MAGENTO_DEFAULT_CURRENCY | unset                          | Magento default currency ie (AUD
+MAGENTO_URL              | unset                          | Magento base url ie http://www.mystore.com
+MAGENTO_ADMIN_FIRSTNAME  | unset                          | Magento admin firstname ie MyStore
+MAGENTO_ADMIN_LASTNAME   | unset                          | Magento admin lastname ie Admin
+MAGENTO_ADMIN_EMAIL      | unset                          | Magento admin email ie mystoreadmin@mystore.com
+MAGENTO_ADMIN_USERNAME   | unset                          | Magento admin username ie mystoreadmin
+MAGENTO_ADMIN_PASSWORD   | unset                          | Magento admin password ie >q34gw7wKU>CPp6.
+
