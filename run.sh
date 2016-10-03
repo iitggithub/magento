@@ -2,7 +2,7 @@
 set -e
 
 # Try to set servername
-if [ -n ${MAGENTO_SERVERNAME} ]
+if [ -n "${MAGENTO_SERVERNAME}" ]
   then
   echo ${MAGENTO_SERVERNAME} >/etc/httpd/conf.d/server_name.conf
 fi
