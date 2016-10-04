@@ -53,9 +53,6 @@ RUN cd /tmp && curl -s \
 
 RUN chown -R apache:apache /var/www/html
 
-# Copy the dev patch
-ADD Varien.php.patch /tmp/Varien.php.patch
-
 VOLUME ["/var/www/html/app/etc"]
 VOLUME ["/etc/httpd/ssl"]
 
