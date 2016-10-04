@@ -19,8 +19,7 @@ RUN yum -y --nogpgcheck install \
                                 php-gd \
                                 php-soap \
                                 php-mbstring \
-                                php-pecl-redis \
-                                patch && \
+                                php-pecl-redis && \
                                 yum clean all
 
 

@@ -24,7 +24,6 @@ fi
 if [ ${MAGENTO_TESTING} -eq 1 ]
   then
   # Disables cookie stuff
-  patch -p0 /var/www/html/app/code/core/Mage/Core/Model/Session/Abstract/Varien.php /tmp/Varien.php.patch
 fi
 
 # Apache gets grumpy about PID files pre-existing
