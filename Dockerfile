@@ -50,6 +50,9 @@ RUN cd /tmp && curl -s \
                     && mv /tmp/magento-mirror-$MAGENTO_VERSION/* \
                           /tmp/magento-mirror-$MAGENTO_VERSION/.htaccess /var/www/html
 
+# Add the modified version of the Varien PHP file
+COPY Varien.php /var/www/html/app/code/core/Mage/Core/Model/Session/Abstract/.Varien.php
+
 RUN chown -R apache:apache /var/www/html
 
 VOLUME ["/var/www/html/app/etc"]
@@ -59,8 +62,8 @@ EXPOSE 80
 EXPOSE 443
 
 # Secure Apache server as much as we can
-ADD magento_admin.conf /etc/httpd/conf.d/magento_admin.conf
-ADD secure.conf /etc/httpd/conf.d/secure.conf
-ADD run.sh /run.sh
+COPY magento_admin.conf /etc/httpd/conf.d/magento_admin.conf
+COPY secure.conf /etc/httpd/conf.d/secure.conf
+COPY run.sh /run.sh
 RUN chmod +x /run.sh
 CMD ["/run.sh"]
