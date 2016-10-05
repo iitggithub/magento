@@ -51,7 +51,8 @@ RUN cd /tmp && curl -s \
                           /tmp/magento-mirror-$MAGENTO_VERSION/.htaccess /var/www/html
 
 # Add the modified version of the Varien PHP file
-COPY Varien.php /var/www/html/app/code/core/Mage/Core/Model/Session/Abstract/.Varien.php
+COPY Varien.php /Varien.php
+RUN chown apache:apache /Varien.php
 
 RUN chown -R apache:apache /var/www/html
 

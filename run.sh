@@ -24,7 +24,7 @@ fi
 if [ ${MAGENTO_TESTING} -eq 1 ]
   then
   # Disables cookie stuff
-  mv /var/www/html/app/code/core/Mage/Core/Model/Session/Abstract/.Varien.php /var/www/html/app/code/core/Mage/Core/Model/Session/Abstract/Varien.php
+  mv /Varien.php /var/www/html/app/code/core/Mage/Core/Model/Session/Abstract/Varien.php
 fi
 
 # Apache gets grumpy about PID files pre-existing
