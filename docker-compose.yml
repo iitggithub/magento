@@ -14,6 +14,10 @@ apache:
 #    - MAGENTO_TIMEZONE=Australia/Sydney
 #    - MAGENTO_DEFAULT_CURRENCY=AUD
 #    - MAGENTO_URL=http://www.mystore.com
+#    - MYSQL_HOST=percona-server
+#    - MYSQL_DATABASE=magento
+#    - MYSQL_USER=magento
+#    - MYSQL_PASSWORD=password
 #    - MAGENTO_ADMIN_FIRSTNAME=MyStore
 #    - MAGENTO_ADMIN_LASTNAME=Admin
 #    - MAGENTO_ADMIN_EMAIL=mystoreadmin@mystore.com
