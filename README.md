@@ -37,6 +37,50 @@ docker run -d --name magento -p 80:80 -p 443:443 -v /data/magento/etc:/var/www/h
 The github repo contains a docker-compose.yml you can use as a base. The docker-compose.yml is compatible with docker-compose 1.5.2+.
 
 ```
+web-server:
+  image: iitgdocker/magento:1.9.2.4
+  ports:
+    - "80:80"
+    #- "443:443"
+  links:
+    - percona-server
+    #- redis
+  volumes:
+#    - /data/magento/etc:/var/www/html/app/etc
+    - /data/magento/ssl:/etc/httpd/ssl
+  environment:
+#    - MAGENTO_LOCALE=en_AU
+#    - MAGENTO_TIMEZONE=Australia/Sydney
+#    - MAGENTO_DEFAULT_CURRENCY=AUD
+#    - MAGENTO_URL=http://www.mystore.com
+#    - MYSQL_HOST=percona-server
+#    - MYSQL_DATABASE=magento
+#    - MYSQL_USER=magento
+#    - MYSQL_PASSWORD=password
+#    - MAGENTO_ADMIN_FIRSTNAME=MyStore
+#    - MAGENTO_ADMIN_LASTNAME=Admin
+#    - MAGENTO_ADMIN_EMAIL=mystoreadmin@mystore.com
+#    - MAGENTO_ADMIN_USERNAME=mystoreadmin
+#    - MAGENTO_ADMIN_PASSWORD=>q34gw7wKU>CPp6.
+    - MAGENTO_TESTING=1
+#redis:
+#  image: redis:3.2.4
+#  ports:
+#    - "6379:6379"
+percona-server:
+  image: percona/percona-server:5.6.28
+  entrypoint:
+    - /entrypoint.sh
+    #- --explicit_defaults_for_timestamp=1
+  ports:
+    - "3306:3306"
+  environment:
+    - MYSQL_ROOT_PASSWORD=password
+    - MYSQL_DATABASE=magento
+    - MYSQL_USER=magento
+    - MYSQL_PASSWORD=password
+  volumes:
+    - /data/percona/mysql:/var/lib/mysql
 apache:
   image: iitgdocker/magento:1.9.2.4
   ports:
