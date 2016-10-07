@@ -42,20 +42,12 @@ RUN sed -i 's/LoadModule info_module/#LoadModule info_module/g' /etc/httpd/conf.
 RUN awk '/    AllowOverride None/{count++;if(count==2){sub("    AllowOverride None","    AllowOverride All")}}1' /etc/httpd/conf/httpd.conf >/etc/httpd/conf/httpd.conf.new
 RUN mv /etc/httpd/conf/httpd.conf.new /etc/httpd/conf/httpd.conf
 
-#RUN cd /tmp && curl -s \
-#                    --insecure \
-#                    -o $MAGENTO_VERSION.tar.gz \
-#                    https://codeload.github.com/OpenMage/magento-mirror/tar.gz/$MAGENTO_VERSION \
-#                    && tar xvf $MAGENTO_VERSION.tar.gz -C /tmp \
-#                    && mv /tmp/magento-mirror-$MAGENTO_VERSION/* \
-#                          /tmp/magento-mirror-$MAGENTO_VERSION/.htaccess /var/www/html
-
-ADD magento-1.9.2.4.tar.gz /tmp/magento-1.9.2.4.tar.gz
-RUN tar xvf magento-1.9.2.4.tar.gz -C /tmp && mv /tmp/magento/* /tmp/magento/.htaccess /var/www/html
+COPY magento-1.9.2.4.tar.gz /tmp/magento-1.9.2.4.tar.gz
+RUN tar zxvf /tmp/magento-1.9.2.4.tar.gz -C /tmp && mv /tmp/magento/* /tmp/magento/.htaccess /var/www/html
 
 # Add the modified version of the Varien PHP file
-COPY Varien.php /Varien.php
-RUN chown apache:apache /Varien.php
+#COPY Varien.php /Varien.php
+#RUN chown apache:apache /Varien.php
 
 RUN chown -R apache:apache /var/www/html
 

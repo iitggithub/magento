@@ -4,7 +4,12 @@ set -e
 # Try to set servername
 if [ -n "${MAGENTO_SERVERNAME}" ]
   then
-  echo ${MAGENTO_SERVERNAME} >/etc/httpd/conf.d/server_name.conf
+  echo "ServerName ${MAGENTO_SERVERNAME}" >/etc/httpd/conf.d/server_name.conf
+fi
+
+if [ -z "${MAGENTO_TESTING}" ]
+  then
+  MAGENTO_TESTING="0"
 fi
 
 # Configure SSL certificates if they exist
@@ -21,10 +26,11 @@ if [ -n "${MAGENTO_LOCALE}" ] && [ -n "${MAGENTO_LOCALE}" ] && [ -n "${MAGENTO_D
 fi
 
 # Makes changes to the container if we're just testing
-if [ ${MAGENTO_TESTING} -eq 1 ]
-  then
-  # Disables cookie stuff
-  mv /Varien.php /var/www/html/app/code/core/Mage/Core/Model/Session/Abstract/Varien.php
+  if [ ${MAGENTO_TESTING} -eq 1 ]
+    then
+    echo "MAgento is NOW in TESTING MODE. This doesn't actually do anything.... yet."
+    # Disables cookie stuff
+    #mv /Varien.php /var/www/html/app/code/core/Mage/Core/Model/Session/Abstract/Varien.php
 fi
 
 # Apache gets grumpy about PID files pre-existing
