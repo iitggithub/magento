@@ -35,6 +35,11 @@ RUN sed -i -e 's/SSLProtocol.*/SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1/g' \
 RUN sed -i -e 's/Listen 443 https/Listen 443 https\nSSLCompression off\nSSLUseStapling on\nSSLStaplingResponderTimeout 5\nSSLStaplingReturnResponderErrors off\nSSLStaplingCache shmcb:\/var\/run\/ocsp\(128000\)\n/g' \
            /etc/httpd/conf.d/ssl.conf
 
+# Change PHP settings as recommended by Magento
+RUN sed -i -e 's/^max_execution_time = .*/max_execution_time = 18000/g' \
+           -e 's/^zlib.output_compression = Off/; enable resulting html compression\nzlib.output_compression = on/g' /etc/php.ini
+RUN echo -e "; disable automatic session start\n; before autoload was initialized\nflag session.auto_start = off\n\n; disable user agent verification to not break multiple image upload\nsuhosin.session.cryptua = Off" >>/etc/php.d/40-suhosin.ini
+
 # Disable unused modules
 RUN sed -i 's/LoadModule info_module/#LoadModule info_module/g' /etc/httpd/conf.modules.d/00-base.conf
 
