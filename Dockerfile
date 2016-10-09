@@ -50,10 +50,6 @@ RUN mv /etc/httpd/conf/httpd.conf.new /etc/httpd/conf/httpd.conf
 COPY magento-1.9.2.4.tar.gz /tmp/magento-1.9.2.4.tar.gz
 RUN tar zxvf /tmp/magento-1.9.2.4.tar.gz -C /tmp && mv /tmp/magento/* /tmp/magento/.htaccess /var/www/html
 
-# Add the modified version of the Varien PHP file
-#COPY Varien.php /Varien.php
-#RUN chown apache:apache /Varien.php
-
 RUN chown -R apache:apache /var/www/html
 
 VOLUME ["/var/www/html/app/etc"]

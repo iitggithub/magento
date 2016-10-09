@@ -26,11 +26,9 @@ if [ -n "${MAGENTO_LOCALE}" ] && [ -n "${MAGENTO_LOCALE}" ] && [ -n "${MAGENTO_D
 fi
 
 # Makes changes to the container if we're just testing
-  if [ ${MAGENTO_TESTING} -eq 1 ]
-    then
-    echo "MAgento is NOW in TESTING MODE. This doesn't actually do anything.... yet."
-    # Disables cookie stuff
-    #mv /Varien.php /var/www/html/app/code/core/Mage/Core/Model/Session/Abstract/Varien.php
+if [ ${MAGENTO_TESTING} -eq 1 ]
+  then
+  echo "MAgento is NOW in TESTING MODE. This doesn't actually do anything.... yet."
 fi
 
 # Apache gets grumpy about PID files pre-existing
