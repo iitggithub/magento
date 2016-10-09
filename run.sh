@@ -28,7 +28,7 @@ fi
 # Makes changes to the container if we're just testing
 if [ ${MAGENTO_TESTING} -eq 1 ]
   then
-  echo "MAgento is NOW in TESTING MODE. This doesn't actually do anything.... yet."
+  echo "Magento is NOW in TESTING MODE. This doesn't actually do anything.... yet."
 fi
 
 # Apache gets grumpy about PID files pre-existing

@@ -50,6 +50,9 @@ RUN mv /etc/httpd/conf/httpd.conf.new /etc/httpd/conf/httpd.conf
 COPY magento-1.9.2.4.tar.gz /tmp/magento-1.9.2.4.tar.gz
 RUN tar zxvf /tmp/magento-1.9.2.4.tar.gz -C /tmp && mv /tmp/magento/* /tmp/magento/.htaccess /var/www/html
 
+# Since we disable TLSv1 above, make sure we tell CURL not to use it and instead use TLS 1.2.
+RUN sed -i "s/\$this->curlOption(CURLOPT_SSL_CIPHER_LIST, 'TLSv1');/#\$this->curlOption(CURLOPT_SSL_CIPHER_LIST, 'TLSv1');\n        \$this->curlOption(CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);/g" /var/www/html/downloader/lib/Mage/HTTP/Client/Curl.php
+
 RUN chown -R apache:apache /var/www/html
 
 VOLUME ["/var/www/html/app/etc"]
