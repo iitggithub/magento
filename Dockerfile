@@ -12,6 +12,7 @@ RUN yum -y --nogpgcheck install \
                                 httpd \
                                 mod_ssl \
                                 wget \
+                                which \
                                 php \
                                 php-devel \
                                 php-suhosin \
