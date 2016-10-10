@@ -11,6 +11,7 @@ COPY remi.repo /etc/yum.repos.d/remi.repo
 RUN yum -y --nogpgcheck install \
                                 httpd \
                                 mod_ssl \
+                                wget \
                                 php \
                                 php-devel \
                                 php-suhosin \
@@ -51,11 +52,15 @@ COPY magento-1.9.2.4.tar.gz /tmp/magento-1.9.2.4.tar.gz
 RUN tar zxvf /tmp/magento-1.9.2.4.tar.gz -C /tmp && mv /tmp/magento/* /tmp/magento/.htaccess /var/www/html
 
 # Since we disable TLSv1 above, make sure we tell CURL not to use it and instead use TLS 1.2.
-RUN sed -i "s/\$this->curlOption(CURLOPT_SSL_CIPHER_LIST, 'TLSv1');/#\$this->curlOption(CURLOPT_SSL_CIPHER_LIST, 'TLSv1');\n        \$this->curlOption(CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);/g" /var/www/html/downloader/lib/Mage/HTTP/Client/Curl.php
+# Magento connect uses curl and will fail without this change.
+RUN sed -i "s/\$this->curlOption(CURLOPT_SSL_CIPHER_LIST, 'TLSv1');/#\$this->curlOption(CURLOPT_SSL_CIPHER_LIST, 'TLSv1');\\n        \$this->curlOption(CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);/g" /var/www/html/downloader/lib/Mage/HTTP/Client/Curl.php
 
 RUN chown -R apache:apache /var/www/html
 
-VOLUME ["/var/www/html/app/etc"]
+# Make the cron files executable. 
+RUN chmod 750 /var/www/html/cron.sh
+
+VOLUME ["/var/www/html"]
 VOLUME ["/etc/httpd/ssl"]
 
 EXPOSE 80
