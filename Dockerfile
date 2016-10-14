@@ -2,7 +2,7 @@ FROM iitgdocker/apache:5.6
 
 MAINTAINER "The Ignorant IT Guy" <iitg@gmail.com>
 
-ENV MAGENTO_VERSION 1.9.2.4
+ENV MAGENTO_VERSION 1.9.3.0
 
 RUN yum -y --nogpgcheck install \
                                 wget \
