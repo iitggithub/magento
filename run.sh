@@ -1,16 +1,13 @@
 #!/bin/sh
 set -e
 
-# Try to set servername
-if [ -n "${MAGENTO_SERVERNAME}" ]
-  then
-  echo "Setting ServerName to '${MAGENTO_SERVERNAME}' in /etc/httpd/conf.d/server_name.conf."
-  echo "ServerName ${MAGENTO_SERVERNAME}" >/etc/httpd/conf.d/server_name.conf
-fi
+# This file does lots of running around before launching httpd
 
-if [ -z "${MAGENTO_TESTING}" ]
+# Try to set servername
+if [ -n "${APACHE_SERVERNAME}" ]
   then
-  MAGENTO_TESTING="0"
+  echo "Setting ServerName to '${APACHE_SERVERNAME}' in /etc/httpd/conf.d/server_name.conf."
+  echo "ServerName ${APACHE_SERVERNAME}" >/etc/httpd/conf.d/server_name.conf
 fi
 
 # Configure SSL certificates if they exist
@@ -18,6 +15,17 @@ test -f /etc/httpd/ssl/server.crt && echo "Found /etc/httpd/ssl/server.crt. Conf
 test -f /etc/httpd/ssl/server.key && echo "Found /etc/httpd/ssl/server.key. Configuring /etc/httpd/conf.d/ssl.conf." && sed -i "s/^SSLCertificateKeyFile.*/SSLCertificateKeyFile \/etc\/httpd\/ssl\/server.key/g" /etc/httpd/conf.d/ssl.conf
 test -f /etc/httpd/ssl/server-chain.crt && echo "Found /etc/httpd/ssl/server-chain.crt. Configuring /etc/httpd/conf.d/ssl.conf." && sed -i "s/^#SSLCertificateChainFile.*/SSLCertificateChainFile \/etc\/httpd\/ssl\/server-chain.crt/g" /etc/httpd/conf.d/ssl.conf
 test -f /etc/httpd/ssl/ca-bundle.crt && echo "Found /etc/httpd/ssl/ca-bundle.crt. Configuring /etc/httpd/conf.d/ssl.conf." && sed -i "s/^#SSLCACertificateFile.*/SSLCACertificateFile \/etc\/httpd\/ssl\/ca-bundle.crt/g" /etc/httpd/conf.d/ssl.conf
+
+# Allows the user to turn mod_security off
+if [ -n "${MOD_SECURITY_ENABLE}" ]
+  then
+  if [ ${MOD_SECURITY_ENABLE} -eq 0 ]
+    then
+    sed -i 's/SecRuleEngine On/SecRuleEngine DetectionOnly/g' /etc/httpd/conf.d/mod_security.conf
+    else
+    sed -i 's/SecRuleEngine DetectionOnly/SecRuleEngine On/g' /etc/httpd/conf.d/mod_security.conf
+  fi
+fi
 
 # Skips the web interface setup wizard
 # If all of the variables are set
@@ -68,14 +76,14 @@ if [ -n "${MAGENTO_LOCALE}" ] && \
   chown -vR apache:apache /var/www/html
 fi
 
-# Makes changes to the container if we're just testing
-if [ ${MAGENTO_TESTING} -eq 1 ]
-  then
-  echo "Magento is NOW in TESTING MODE. This doesn't actually do anything.... yet."
-fi
-
 # Apache gets grumpy about PID files pre-existing
 rm -vf /var/run/httpd/httpd.pid
+
+if [ ! -f /var/lib/aide/aide.db.gz ]
+  then
+  echo "Generating a new AIDE database in /var/lib/aide/aide.db.gz..."
+  /usr/sbin/aide --init && mv -vf /tmp/aide.db.new.gz /var/lib/aide/aide.db.gz
+fi
 
 echo "httpd starting as process 1 ..."
 exec httpd -DFOREGROUND

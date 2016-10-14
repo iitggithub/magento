@@ -4,7 +4,7 @@ I was asked to install magento on a host and decided to run it via docker. The e
 
 # Notes
 
-The dockerfile is based on the actual installation guide/requirements on the magento website + some basic hardening guides for php, apache and openssl. It's also partially based on Alex Chengs' Magento 1.9.x image.
+The dockerfile is based on the actual installation guide/requirements on the magento website implemented on the back of a hardened apache container running php 5.6. It's also partially based on Alex Chengs' Magento 1.9.x image.
 
 # Supported Magento versions
 
@@ -62,7 +62,6 @@ web-server:
 #    - MAGENTO_ADMIN_EMAIL=mystoreadmin@mystore.com
 #    - MAGENTO_ADMIN_USERNAME=mystoreadmin
 #    - MAGENTO_ADMIN_PASSWORD=>q34gw7wKU>CPp6.
-    - MAGENTO_TESTING=1
 #redis:
 #  image: redis:3.2.4
 #  ports:
@@ -81,51 +80,15 @@ percona-server:
     - MYSQL_PASSWORD=password
   volumes:
     - /data/percona/mysql:/var/lib/mysql
-apache:
-  image: iitgdocker/magento:1.9.2.4
-  ports:
-    - "80:80"
-    - "443:443"
-  links:
-    - percona-server
-    - redis
-  volumes:
-    - /data/magento/etc:/var/www/html/app/etc
-    - /data/magento/ssl:/etc/httpd/ssl
-redis:
-  image: redis:3.2.4
-  ports:
-    - "6379:6379"
-percona-server:
-  image: percona/percona-server:5.6.28
-  ports:
-    - "3306:3306"
-  environment:
-    - MYSQL_ROOT_PASSWORD=password
-    - MYSQL_DATABASE=magento
-    - MYSQL_USER=magento
-    - MYSQL_PASSWORD=password
-  volumes:
-    - /data/percona/mysql:/var/lib/mysql
 ```
 
 By running 'docker-compose up -d' from within the same directory as your docker-compose.yml, you'll be able to bring the container up.
 
 # Volumes
 
+## Apache configuration
 
-## SSL Certificates
-
-If you want to use your own SSL certificates you'll need to mount a volume onto /etc/httpd/ssl. Your certificates MUST be named as follows:
-
-```
-server.crt
-server.key
-server-chain.crt
-ca-bundle.crt
-```
-
-The run.sh will check for each of those files before modifying /etc/httpd/conf.d/ssl.conf accordingly.
+Since this image is built on the back of the iitgdocker/apache image, you should take a look at that for Apache specific configuration.
 
 ## Magento configuration
 
@@ -142,8 +105,8 @@ MYSQL_HOST               | percona-server                 | The host serving the
 MYSQL_DATABASE           | magento                        | The name of a MySQL database to create on database container startup
 MYSQL_USER               | magento                        | The mysql user to create on database container startup
 MYSQL_PASSWORD           | password                       | The password for the mysql user above
-MAGENTO_TESTING          | 0                              | Disables checks to make it easier to run in a test environment. 0 = production, 1 = testing.
-MAGENTO_SERVERNAME       | unset                          | Sets a global ServerName in Apache configuration.
+APACHE_SERVERNAME        | unset                          | Sets the Apache server name.
+MOD_SECURITY_ENABLE      | 1                              | Enables the mod_security web application firewall. 0 to disable.
 
 The run.sh script requires all of these variables to be set before it will run the install.php script. If you don't have these set, you'll be forced to use the web installation wizard on first run.
 

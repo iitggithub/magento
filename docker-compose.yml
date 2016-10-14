@@ -23,7 +23,6 @@ apache:
 #    - MAGENTO_ADMIN_EMAIL=mystoreadmin@mystore.com
 #    - MAGENTO_ADMIN_USERNAME=mystoreadmin
 #    - MAGENTO_ADMIN_PASSWORD=>q34gw7wKU>CPp6.
-    - MAGENTO_TESTING=1
 #redis:
 #  image: redis:3.2.4
 #  ports:
