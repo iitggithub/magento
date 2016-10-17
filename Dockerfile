@@ -21,7 +21,7 @@ RUN sed -i -e 's/^max_execution_time = .*/max_execution_time = 18000/g' \
            -e 's/^zlib.output_compression = Off/; enable resulting html compression\nzlib.output_compression = on/g' /etc/php.ini
 RUN echo -e "; disable automatic session start\n; before autoload was initialized\nflag session.auto_start = off\n\n; disable user agent verification to not break multiple image upload\nsuhosin.session.cryptua = Off" >>/etc/php.d/40-suhosin.ini
 
-RUN curl --insecure -o /tmp/magento.tar.gz http://files.gtenterprises.net.au/magento-${MAGENTO_VERSION}.tar.gz
+RUN curl -L --insecure -o /tmp/magento.tar.gz http://files.gtenterprises.net.au/magento-${MAGENTO_VERSION}.tar.gz
 RUN tar zxvf /tmp/magento.tar.gz -C /tmp >/dev/null && mv /tmp/magento/* /tmp/magento/.htaccess /var/www/html
 
 # TLSv1 is disabled, make sure we tell CURL not to use it and instead use TLS 1.2.
