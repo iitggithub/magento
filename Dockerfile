@@ -36,9 +36,6 @@ RUN chmod 750 /var/www/html/cron.sh
 EXPOSE 80
 EXPOSE 443
 
-# Secure Apache server as much as we can
-COPY magento_admin.conf /etc/httpd/conf.d/magento_admin.conf
-
 COPY run.sh /run.sh
 RUN chmod +x /run.sh
 CMD ["/run.sh"]
