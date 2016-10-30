@@ -9,6 +9,7 @@ RUN yum -y --nogpgcheck install \
                                 which \
                                 php-mysql \
                                 php-mcrypt \
+                                libmcrypt \
                                 php-gd \
                                 php-soap \
                                 php-mbstring \

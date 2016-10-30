@@ -1,5 +1,5 @@
 #!/bin/sh
-set -e
+#set -e
 
 # This file does lots of running around before launching httpd
 
@@ -16,6 +16,14 @@ test -f /etc/httpd/ssl/server.key && echo "Found /etc/httpd/ssl/server.key. Conf
 test -f /etc/httpd/ssl/server-chain.crt && echo "Found /etc/httpd/ssl/server-chain.crt. Configuring /etc/httpd/conf.d/ssl.conf." && sed -i "s/^#SSLCertificateChainFile.*/SSLCertificateChainFile \/etc\/httpd\/ssl\/server-chain.crt/g" /etc/httpd/conf.d/ssl.conf
 test -f /etc/httpd/ssl/ca-bundle.crt && echo "Found /etc/httpd/ssl/ca-bundle.crt. Configuring /etc/httpd/conf.d/ssl.conf." && sed -i "s/^#SSLCACertificateFile.*/SSLCACertificateFile \/etc\/httpd\/ssl\/ca-bundle.crt/g" /etc/httpd/conf.d/ssl.conf
 
+# Move modsecurity files to the custom data
+# directory so the user can edit them as they need to.
+if [ ! -f modsecurity_crs_10_setup.conf ]
+  then
+  echo "Installing mod_security core ruleset into /data/conf.d...."
+  tar zxvf /tmp/mod_security.tar.gz -C /data/conf.d
+fi
+
 # Allows the user to turn mod_security off
 if [ -n "${MOD_SECURITY_ENABLE}" ]
   then
@@ -25,6 +33,14 @@ if [ -n "${MOD_SECURITY_ENABLE}" ]
     else
     sed -i 's/SecRuleEngine DetectionOnly/SecRuleEngine On/g' /etc/httpd/conf.d/mod_security.conf
   fi
+fi
+
+# Skips the web interface setup wizard
+# If local.xml is found in /data/conf.d
+if [ -f /data/conf.d/local.xml ]
+  then
+  echo "Found /data/conf.d/local.xml... linking to /var/www/html/app/etc/local.xml"
+  ln -sf /data/conf.d/local.xml /var/www/html/app/etc/local.xml
 fi
 
 # Skips the web interface setup wizard
