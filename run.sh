@@ -4,21 +4,37 @@
 # This file does lots of running around before launching httpd
 
 # Try to set servername
-if [ -n "${APACHE_SERVERNAME}" ]
+if [ -n "${APACHE_SERVERNAME}" ] && [ -z "`grep "${APACHE_SERVERNAME}" /etc/httpd/conf.d/server_name.conf`" ]
   then
   echo "Setting ServerName to '${APACHE_SERVERNAME}' in /etc/httpd/conf.d/server_name.conf."
   echo "ServerName ${APACHE_SERVERNAME}" >/etc/httpd/conf.d/server_name.conf
 fi
 
 # Configure SSL certificates if they exist
-test -f /etc/httpd/ssl/server.crt && echo "Found /etc/httpd/ssl/server.crt. Configuring /etc/httpd/conf.d/ssl.conf." && sed -i "s/^SSLCertificateFile.*/SSLCertificateFile \/etc\/httpd\/ssl\/server.crt/g" /etc/httpd/conf.d/ssl.conf
-test -f /etc/httpd/ssl/server.key && echo "Found /etc/httpd/ssl/server.key. Configuring /etc/httpd/conf.d/ssl.conf." && sed -i "s/^SSLCertificateKeyFile.*/SSLCertificateKeyFile \/etc\/httpd\/ssl\/server.key/g" /etc/httpd/conf.d/ssl.conf
-test -f /etc/httpd/ssl/server-chain.crt && echo "Found /etc/httpd/ssl/server-chain.crt. Configuring /etc/httpd/conf.d/ssl.conf." && sed -i "s/^#SSLCertificateChainFile.*/SSLCertificateChainFile \/etc\/httpd\/ssl\/server-chain.crt/g" /etc/httpd/conf.d/ssl.conf
-test -f /etc/httpd/ssl/ca-bundle.crt && echo "Found /etc/httpd/ssl/ca-bundle.crt. Configuring /etc/httpd/conf.d/ssl.conf." && sed -i "s/^#SSLCACertificateFile.*/SSLCACertificateFile \/etc\/httpd\/ssl\/ca-bundle.crt/g" /etc/httpd/conf.d/ssl.conf
+if [ -f /etc/httpd/ssl/server.crt ] && [ -z "`grep "/etc/httpd/ssl/server.crt" /etc/httpd/conf.d/ssl.conf`" ]
+  then
+  echo "Found /etc/httpd/ssl/server.crt. Configuring /etc/httpd/conf.d/ssl.conf."
+  sed -i "s/^SSLCertificateFile.*/SSLCertificateFile \/etc\/httpd\/ssl\/server.crt/g" /etc/httpd/conf.d/ssl.conf
+fi
+if [ -f /etc/httpd/ssl/server.key ] && [ -z "`grep "/etc/httpd/ssl/server.key" /etc/httpd/conf.d/ssl.conf`" ]
+  then
+  echo "Found /etc/httpd/ssl/server.key. Configuring /etc/httpd/conf.d/ssl.conf."
+  sed -i "s/^SSLCertificateKeyFile.*/SSLCertificateKeyFile \/etc\/httpd\/ssl\/server.key/g" /etc/httpd/conf.d/ssl.conf
+fi
+if [ -f /etc/httpd/ssl/server-chain.crt ] && [ -z "`grep "/etc/httpd/ssl/server-chain.crt" /etc/httpd/conf.d/ssl.conf`" ]
+  then
+  echo "Found /etc/httpd/ssl/server-chain.crt. Configuring /etc/httpd/conf.d/ssl.conf."
+  sed -i "s/^#SSLCertificateChainFile.*/SSLCertificateChainFile \/etc\/httpd\/ssl\/server-chain.crt/g" /etc/httpd/conf.d/ssl.conf
+fi
+if [ -f /etc/httpd/ssl/ca-bundle.crt ] && [ -z "`grep "/etc/httpd/ssl/ca-bundle.crt" /etc/httpd/conf.d/ssl.conf`" ]
+  then
+  echo "Found /etc/httpd/ssl/ca-bundle.crt. Configuring /etc/httpd/conf.d/ssl.conf."
+  sed -i "s/^#SSLCACertificateFile.*/SSLCACertificateFile \/etc\/httpd\/ssl\/ca-bundle.crt/g" /etc/httpd/conf.d/ssl.conf
+fi
 
 # Move modsecurity files to the custom data
 # directory so the user can edit them as they need to.
-if [ ! -f modsecurity_crs_10_setup.conf ]
+if [ ! -f /data/conf.d/modsecurity_crs_10_setup.conf ]
   then
   echo "Installing mod_security core ruleset into /data/conf.d...."
   tar zxvf /tmp/mod_security.tar.gz -C /data/conf.d
@@ -37,7 +53,7 @@ fi
 
 # Skips the web interface setup wizard
 # If local.xml is found in /data/conf.d
-if [ -f /data/conf.d/local.xml ]
+if [ -f /data/conf.d/local.xml ] && [ ! -L /var/www/html/app/etc/local.xml ]
   then
   echo "Found /data/conf.d/local.xml... linking to /var/www/html/app/etc/local.xml"
   ln -sf /data/conf.d/local.xml /var/www/html/app/etc/local.xml
