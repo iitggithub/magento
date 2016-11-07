@@ -29,7 +29,8 @@ RUN curl \
          -o /tmp/magento.tar.gz \
          http://files.gtenterprises.net.au/magento-${MAGENTO_VERSION}.tar.gz && \
          tar zxvf /tmp/magento.tar.gz -C /tmp >/dev/null && \
-         mv /tmp/magento/* /tmp/magento/.htaccess /var/www/html && rm -vf /tmp/magento*
+         mv /tmp/magento/* /tmp/magento/.htaccess /var/www/html && \
+         rm -rvf /tmp/magento*
 
 # TLSv1 is disabled, make sure we tell CURL not to use it and instead use TLS 1.2.
 # Magento connect uses curl and will fail without this change.
