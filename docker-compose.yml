@@ -2,14 +2,14 @@ apache:
   image: iitgdocker/magento:1.9.2.4
   ports:
     - "80:80"
-    #- "443:443"
+    - "443:443"
   links:
     - percona-server
     #- redis
   volumes:
 #    - /data/magento/etc:/var/www/html/app/etc
     - /data/magento/ssl:/etc/httpd/ssl
-  environment:
+#  environment:
 #    - MAGENTO_LOCALE=en_AU
 #    - MAGENTO_TIMEZONE=Australia/Sydney
 #    - MAGENTO_DEFAULT_CURRENCY=AUD
