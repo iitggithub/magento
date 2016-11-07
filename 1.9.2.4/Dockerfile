@@ -2,14 +2,13 @@ FROM iitgdocker/php:5.6
 
 MAINTAINER "The Ignorant IT Guy" <iitg@gmail.com>
 
-ENV MAGENTO_VERSION 1.9.3.0
+ENV MAGENTO_VERSION 1.9.2.4
 
 RUN yum -y --nogpgcheck install \
                                 wget \
                                 which \
                                 php-mysql \
                                 php-mcrypt \
-                                libmcrypt \
                                 php-gd \
                                 php-soap \
                                 php-mbstring \
