@@ -16,7 +16,6 @@ RUN yum -y --nogpgcheck install \
                                 php-pecl-redis && \
                                 yum clean all
 
-
 # Change PHP settings as recommended by Magento
 RUN sed -i -e 's/^max_execution_time = .*/max_execution_time = 18000/g' \
            -e 's/^zlib.output_compression = Off/; enable resulting html compression\nzlib.output_compression = on/g' /etc/php.ini
