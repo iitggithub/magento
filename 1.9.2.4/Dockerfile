@@ -7,6 +7,7 @@ ENV MAGENTO_VERSION 1.9.2.4
 RUN yum -y --nogpgcheck install \
                                 wget \
                                 which \
+                                php-ioncube-loader \
                                 php-mysql \
                                 php-mcrypt \
                                 php-gd \
