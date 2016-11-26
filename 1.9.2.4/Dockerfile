@@ -8,6 +8,7 @@ RUN yum -y --nogpgcheck install \
                                 wget \
                                 which \
                                 php-ioncube-loader \
+                                php-xml \
                                 php-mysql \
                                 php-mcrypt \
                                 php-gd \
